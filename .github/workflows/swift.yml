@@ -1,22 +1,22 @@
-# This workflow will build a Swift project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
-
-name: Swift
+name: Build Teach Studio
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
-
-    runs-on: macos-latest
-
+    runs-on: macos-15
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+      - uses: actions/checkout@v4
+      - name: Build app
+        run: |
+          chmod +x build.sh
+          ./build.sh
+      - name: Zip app
+        run: ditto -c -k --keepParent "Teach Studio.app" TeachStudio.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TeachStudio
+          path: TeachStudio.zip
