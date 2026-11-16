@@ -35,4 +35,7 @@ EOF
 
 codesign --force --deep --sign - "$APP"
 echo "Built: $APP"
-open "$APP"
+# Don't try to launch the app on CI machines (GitHub Actions sets CI=true)
+if [ -z "$CI" ]; then
+  open "$APP"
+fi
